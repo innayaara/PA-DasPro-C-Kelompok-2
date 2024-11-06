@@ -1,0 +1,42 @@
+[
+    {
+        "Nama": "Cincin Emas",
+        "Harga": "5000000",
+        "Stok": "4"
+    },
+    {
+        "Nama": "Kalung Berlian",
+        "Harga": "15000000",
+        "Stok": "5"
+    },
+    {
+        "Nama": "Gelang Emas",
+        "Harga": "8000000",
+        "Stok": "7"
+    },
+    {
+        "Nama": "Anting Berlian",
+        "Harga": "30000000",
+        "Stok": "15"
+    },
+    {
+        "Nama": "Cincin Couple Berlian",
+        "Harga": "20000000",
+        "Stok": "20"
+    },
+    {
+        "Nama": "testing",
+        "Harga": 1230,
+        "Stok": 555
+    },
+    {
+        "Nama": "sadfgh",
+        "Harga": 999999999999999999999999999999999999999999999999999999,
+        "Stok": 999999999999999999999999999999999999999999999999
+    },
+    {
+        "Nama": "nayo",
+        "Harga": 99999,
+        "Stok": 1
+    }
+]

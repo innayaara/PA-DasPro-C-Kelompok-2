@@ -12,7 +12,7 @@
     {
         "Nama": "Gelang Emas",
         "Harga": "8000000",
-        "Stok": "7"
+        "Stok": "6"
     },
     {
         "Nama": "Anting Berlian",
@@ -23,20 +23,5 @@
         "Nama": "Cincin Couple Berlian",
         "Harga": "20000000",
         "Stok": "20"
-    },
-    {
-        "Nama": "testing",
-        "Harga": 1230,
-        "Stok": 555
-    },
-    {
-        "Nama": "sadfgh",
-        "Harga": 999999999999999999999999999999999999999999999999999999,
-        "Stok": 999999999999999999999999999999999999999999999999
-    },
-    {
-        "Nama": "nayo",
-        "Harga": 99999,
-        "Stok": 1
     }
 ]

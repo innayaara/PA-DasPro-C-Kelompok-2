@@ -10,5 +10,17 @@
         "password": "yyy",
         "role": "user",
         "saldo": "10000000"
+    },
+    {
+        "username": "halo",
+        "password": "halo",
+        "role": "user",
+        "saldo": 22000000
+    },
+    {
+        "username": "nay",
+        "password": "nay",
+        "role": "user",
+        "saldo": 0
     }
 ]

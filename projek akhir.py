@@ -2,7 +2,6 @@ import json
 import os
 from prettytable import PrettyTable
 import pwinput
-import time
 
 def clear():
     os.system("cls")
@@ -13,21 +12,6 @@ def inisialisasi_file():
         with open("users.json", "w") as file:
             json.dump([], file, indent=4)
             
-# Fungsi untuk memuat data pengguna
-def muat_pengguna():
-    with open("users.json", "r") as file:
-        return json.load(file)
-
-# Fungsi untuk menyimpan data pengguna
-def simpan_pengguna(pengguna):
-    with open("users.json", "w") as file:
-        json.dump(pengguna, file, indent=4)
-        
-# Fungsi untuk menyimpan data ke file JSON
-def simpan_data(nama_file, data):
-    with open(nama_file, 'w') as file:
-        json.dump(data, file)
-
 # Fungsi untuk memuat data produk
 jsonPathProduk = r"produk.json"
 
@@ -41,8 +25,6 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     print("Terjadi kesalahan dalam membaca data produk.")
     dataProduk = []
-
-
 
 # Fungsi untuk menyimpan dan memuat data
 def simpan_produk(produk):
@@ -80,7 +62,6 @@ def tampilkan_produk():
     print(tabel)
     input("Tekan enter untuk melanjutkan...")
 
-# Fungsi untuk menambah produk baru
 def tambah_produk():
     produk = dataProduk
     
@@ -89,23 +70,30 @@ def tambah_produk():
     try:
         harga = int(input("Masukkan harga produk: Rp "))
         if harga <= 0:
-            print("======================================")
-            print("|      Harga harus lebih dari 0!     |")
-            print("======================================")
+            print("+====================================================================+")
+            print("|                     Harga harus lebih dari 0!                       |")
+            print("+====================================================================+")
             return
-            
+        if len(str(harga)) > 10:
+            print("+====================================================================+")
+            print("|             Harga tidak boleh lebih dari 10 digit                  |")
+            print("+====================================================================+")
+            input("Tekan enter untuk kembali...")
+            return
         stok = int(input("Masukkan stok produk: "))
         if stok < 0:
-            print("======================================")
-            print("|      Stok tidak boleh negatif!     |")
-            print("======================================")
+            print("+====================================================================+")
+            print("|                      Stok tidak boleh negatif!                     |")
+            print("+====================================================================+")
             return
             
     except ValueError:
-        print("Harga dan stok harus berupa angka!")
+        print("+====================================================================+")
+        print("|              Harga dan stok harus berupa angka!                     |")
+        print("+====================================================================+")
         return
     except KeyboardInterrupt:
-            print("jangan tekan ctrl")
+            print("jangan tekan ctrl + C")
             input("Tekan enter untuk melanjutkan.....")
     
     # Tambahkan produk baru ke list produk tanpa kode
@@ -116,9 +104,9 @@ def tambah_produk():
     })
     
     simpan_produk(produk)
-    print("======================================")
-    print("|    Produk berhasil ditambahkan!    |")
-    print("======================================")
+    print("+====================================================================+")
+    print("|                  Produk berhasil ditambahkan!                      |")
+    print("+====================================================================+")
 
 
 # Fungsi untuk memperbarui produk
@@ -140,9 +128,9 @@ def perbarui_produk():
             break
     
     if not produk_ditemukan:
-        print("======================================")
-        print("|      Produk tidak ditemukan!       |")
-        print("======================================")
+        print("+====================================================================+")
+        print("|                   Produk tidak ditemukan!                          |")
+        print("+====================================================================+")
         return
     
     print("\nBiarkan kosong jika tidak ingin mengubah")
@@ -158,10 +146,15 @@ def perbarui_produk():
             harga_baru = int(harga_baru)
             if harga_baru <= 0:
                 print("Harga harus lebih dari 0!")
+                print("+====================================================================+")
+                print("|                    Harga harus lebih dari 0                        |")
+                print("+====================================================================+")
                 return
             produk_ditemukan["Harga"] = harga_baru
         except ValueError:
-            print("Harga harus berupa angka!")
+            print("+====================================================================+")
+            print("|                   Harga harus berupa angka!                         |")
+            print("+====================================================================+")
             return
         except KeyboardInterrupt:
             print("jangan tekan ctrl")
@@ -170,27 +163,33 @@ def perbarui_produk():
         try:
             stok_baru = int(stok_baru)
             if stok_baru < 0:
-                print("Stok tidak boleh negatif!")
+                print("+====================================================================+")
+                print("|                  Stok tidak boleh negatif!                         |")
+                print("+====================================================================+")
                 return
             produk_ditemukan["Stok"] = stok_baru
         except ValueError:
-            print("Stok harus berupa angka!")
+            print("+====================================================================+")
+            print("|                    Stok harus berupa angka!                        |")
+            print("+====================================================================+")
             return
         except KeyboardInterrupt:
             print("jangan tekan ctrl")
             input("Tekan enter untuk melanjutkan.....")
     
     simpan_produk(produk)
-    print("======================================")
-    print("|    Produk berhasil diperbarui!     |")
-    print("======================================")
+    print("+====================================================================+")
+    print("|                    Produk berhasil diperbarui!                     |")
+    print("+====================================================================+")
 
 # Fungsi untuk menghapus produk
 def hapus_produk():
     produk = dataProduk
     
     if not produk:
-        print("Belum ada produk tersedia!")
+        print("+====================================================================+")
+        print("|                   Belum ada produk tersedia!                       |")
+        print("+====================================================================+")
         return
         
     tampilkan_produk()
@@ -204,9 +203,9 @@ def hapus_produk():
             break
     
     if not produk_ditemukan:
-        print("======================================")
-        print("|      Produk tidak ditemukan!       |")
-        print("======================================")
+        print("+====================================================================+")
+        print("|                    Produk tidak ditemukan!                         |")
+        print("+====================================================================+")
         return
     
     # Konfirmasi penghapusan
@@ -214,13 +213,13 @@ def hapus_produk():
     if konfirmasi == 'y':
         produk.remove(produk_ditemukan) 
         simpan_produk(produk)
-        print("======================================")
-        print("|     Produk berhasil dihapus!       |")
-        print("======================================")
+        print("+====================================================================+")
+        print("|                      Produk berhasil dihapus!                      |")
+        print("+====================================================================+")
     else:
-        print("======================================")
-        print("|      Penghapusan dibatalkan         |")
-        print("======================================")
+        print("+====================================================================+")
+        print("|                      Penghapusan dibatalkan.                       |")
+        print("+====================================================================+")
 
 # Fungsi untuk mencari produk
 def cari_produk():
@@ -253,9 +252,9 @@ def cari_produk():
                 continue  # Lanjutkan ke produk berikutnya
         print(tabel)
     else:
-        print("======================================")
-        print("|       Produk tidak ditemukan       |")
-        print("======================================")
+        print("+====================================================================+")
+        print("|                  Produk tidak ditemukan!                           |")
+        print("+====================================================================+")
 
 # Fungsi untuk mengurutkan produk
 def urutkan_produk(user):
@@ -265,10 +264,13 @@ def urutkan_produk(user):
         print("Belum ada produk tersedia!")
         return
         
-    print("Urutkan berdasarkan:")  
-    print("1. Nama")
-    print("2. Harga")
-    print("3. Stok")
+    print("+====================================================================+")
+    print("|                        Urutkan berdasarkan:                        |")
+    print("+====================================================================+")
+    print("| [1]. Nama                                                          |")
+    print("| [2]. Harga                                                         |")
+    print("| [3]. Stok                                                          |")
+    print("+====================================================================+")
     try:
         pilihan = input("Pilih opsi pengurutan (1-3): ")  
         if pilihan not in ["1", "2", "3"]:  
@@ -476,14 +478,13 @@ def registrasi():
 
 def menu_user(user):
     while True:
-        clear()
         print("+====================================================================+")
         print("|                           Menu Pembeli                             |")
         print("+====================================================================+")
         print("| [1]. Lihat Produk                                                  |")
-        print("| [2]. Transaksi Pembelian                                           |")
-        print("| [3]. Lihat Saldo E-Money                                           |")
-        print("| [4]. Top Up Saldo E-Money                                          |")
+        print("| [2]. Lihat Saldo E-Money                                           |")
+        print("| [3]. Top Up Saldo E-Money                                          |")
+        print("| [4]. Transaksi Pembelian                                           |")
         print("| [5]. Cari Produk                                                   |")
         print("| [6]. Sorting Produk                                                |")
         print("| [7]. Logout                                                        |")
@@ -494,11 +495,11 @@ def menu_user(user):
             if pilihan_pengguna == "1":
                 tampilkan_produk()
             elif pilihan_pengguna == "2":
-                transaksi(user)
-            elif pilihan_pengguna == "3":
                 lihat_saldo(user)
-            elif pilihan_pengguna == "4":
+            elif pilihan_pengguna == "3":
                 top_up_saldo(user)
+            elif pilihan_pengguna == "4":
+                transaksi(user)
             elif pilihan_pengguna == "5":
                 cari_produk()
             elif pilihan_pengguna == "6":
@@ -599,19 +600,23 @@ def main():
     inisialisasi_file()
     while True:
         clear()
-        print("\n === Menu Utama ===")
-        print("1. Login")
-        print("2. Registrasi")
-        print("3. Keluar")
+        print("+====================================================================+")
+        print("|                            Menu Utama                              |")
+        print("+====================================================================+")
+        print("| [1]. Login                                                         |")
+        print("| [2]. Registrasi                                                    |")
+        print("| [3]. Keluar                                                        |")
+        print("+====================================================================+")
         try:
             pilihan = input("Pilih opsi: ")
-        
             if pilihan == "1":
                 login()
             elif pilihan == "2": 
                 registrasi()
             elif pilihan == "3":
-                print("Anda berhasil logout. Terima kasih telah menggunakan program ini!")
+                print("+====================================================================+")
+                print("|  Anda berhasil keluar. Terimakasih telah menggunakan pogram ini!   |")
+                print("+====================================================================+")
                 break
             else:
                 print("Pilihan tidak valid.")

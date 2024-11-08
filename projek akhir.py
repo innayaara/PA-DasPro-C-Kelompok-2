@@ -8,14 +8,12 @@ def clear():
 
 # Fungsi untuk menginisialisasi file yang diperlukan
 def inisialisasi_file():
-    if not os.path.exists("users.json"):
-        with open("users.json", "w") as file:
+    if not os.path.exists("pengguna.json"):
+        with open("pengguna.json", "w") as file:
             json.dump([], file, indent=4)
             
 # Fungsi untuk memuat data produk
 jsonPathProduk = r"produk.json"
-
-# Membaca data produk dari file JSON
 try:
     with open(jsonPathProduk, "r") as file:
         dataProduk = json.load(file)
@@ -64,9 +62,7 @@ def tampilkan_produk():
 
 def tambah_produk():
     produk = dataProduk
-    
     nama = input("Masukkan nama produk: ")
-    
     try:
         harga = int(input("Masukkan harga produk: Rp "))
         if harga <= 0:
@@ -85,24 +81,22 @@ def tambah_produk():
             print("+====================================================================+")
             print("|                      Stok tidak boleh negatif!                     |")
             print("+====================================================================+")
-            return
-            
+            return       
     except ValueError:
         print("+====================================================================+")
-        print("|              Harga dan stok harus berupa angka!                     |")
+        print("|              Harga dan stok harus berupa angka!                    |")
         print("+====================================================================+")
         return
     except KeyboardInterrupt:
-            print("jangan tekan ctrl + C")
+            print("+====================================================================+")
+            print("|                      jangan tekan ctrl + C                         |")
+            print("+====================================================================+")
             input("Tekan enter untuk melanjutkan.....")
-    
-    # Tambahkan produk baru ke list produk tanpa kode
     produk.append({
         "Nama": nama,
         "Harga": harga,
         "Stok": stok
     })
-    
     simpan_produk(produk)
     print("+====================================================================+")
     print("|                  Produk berhasil ditambahkan!                      |")
@@ -112,33 +106,26 @@ def tambah_produk():
 # Fungsi untuk memperbarui produk
 def perbarui_produk():
     produk = dataProduk
-    
     if not produk:
         print("Belum ada produk tersedia!")
         return
-        
+
     tampilkan_produk()
     nama_produk = input("Masukkan nama produk yang akan diperbarui: ")
-    
-    # Cari produk berdasarkan nama
     produk_ditemukan = None
     for item in produk:
         if item["Nama"].lower() == nama_produk.lower():
             produk_ditemukan = item
             break
-    
     if not produk_ditemukan:
         print("+====================================================================+")
         print("|                   Produk tidak ditemukan!                          |")
         print("+====================================================================+")
         return
-    
     print("\nBiarkan kosong jika tidak ingin mengubah")
     nama_baru = input(f"Masukkan nama baru ({produk_ditemukan['Nama']}): ")
     harga_baru = input(f"Masukkan harga baru (Rp {produk_ditemukan['Harga']:,}): ")
     stok_baru = input(f"Masukkan stok baru ({produk_ditemukan['Stok']}): ")
-    
-    # Memperbarui data produk
     if nama_baru:
         produk_ditemukan["Nama"] = nama_baru
     if harga_baru:
@@ -176,7 +163,6 @@ def perbarui_produk():
         except KeyboardInterrupt:
             print("jangan tekan ctrl")
             input("Tekan enter untuk melanjutkan.....")
-    
     simpan_produk(produk)
     print("+====================================================================+")
     print("|                    Produk berhasil diperbarui!                     |")
@@ -185,30 +171,23 @@ def perbarui_produk():
 # Fungsi untuk menghapus produk
 def hapus_produk():
     produk = dataProduk
-    
     if not produk:
         print("+====================================================================+")
         print("|                   Belum ada produk tersedia!                       |")
         print("+====================================================================+")
         return
-        
     tampilkan_produk()
     nama_produk = input("Masukkan nama produk yang akan dihapus: ")
-    
-    # Cari produk berdasarkan nama
     produk_ditemukan = None
     for item in produk:
         if item["Nama"].lower() == nama_produk.lower():
             produk_ditemukan = item
             break
-    
     if not produk_ditemukan:
         print("+====================================================================+")
         print("|                    Produk tidak ditemukan!                         |")
         print("+====================================================================+")
         return
-    
-    # Konfirmasi penghapusan
     konfirmasi = input(f"Yakin ingin menghapus {produk_ditemukan['Nama']}? (y/n): ").lower()
     if konfirmasi == 'y':
         produk.remove(produk_ditemukan) 
@@ -224,24 +203,18 @@ def hapus_produk():
 # Fungsi untuk mencari produk
 def cari_produk():
     produk = dataProduk
-    
     if not produk:
         print("Belum ada produk tersedia!")
         return
-        
     kata_kunci = input("Masukkan kata kunci pencarian: ").lower()
-    
-    # Mencari produk yang mengandung kata kunci pada nama
     hasil = [detail for detail in produk if kata_kunci in detail["Nama"].lower()]
-    
     if hasil:
         tabel = PrettyTable()
         tabel.title = "Hasil Pencarian"
         tabel.field_names = ["Nama", "Harga", "Stok"]
         for detail in hasil:
-            # Pastikan detail['Harga'] adalah angka
             try:
-                harga = int(detail["Harga"])  # Mengonversi menjadi integer jika perlu
+                harga = int(detail["Harga"])  
                 tabel.add_row([
                     detail["Nama"],
                     f"Rp {harga:,}",
@@ -249,21 +222,18 @@ def cari_produk():
                 ])
             except ValueError:
                 print(f"Data harga untuk {detail['Nama']} tidak valid.")
-                continue  # Lanjutkan ke produk berikutnya
+                continue  
         print(tabel)
     else:
         print("+====================================================================+")
         print("|                  Produk tidak ditemukan!                           |")
         print("+====================================================================+")
 
-# Fungsi untuk mengurutkan produk
 def urutkan_produk(user):
-    produk = dataProduk  # Mengambil data produk
-    
-    if not produk:  # Cek apakah ada produk
+    produk = dataProduk  
+    if not produk: 
         print("Belum ada produk tersedia!")
         return
-        
     print("+====================================================================+")
     print("|                        Urutkan berdasarkan:                        |")
     print("+====================================================================+")
@@ -289,22 +259,16 @@ def urutkan_produk(user):
             input("Tekan enter untuk melanjutkan.....")    
         except KeyboardInterrupt:
             pass
-    
-    # Pemetaan pilihan ke key produk
+        
     key_map = {"1": "Nama", "2": "Harga", "3": "Stok"}
     key = key_map[pilihan]
     reverse = urutan == "2"  
-    
-    # Mengurutkan produk berdasarkan kunci yang dipilih
     sorted_items = sorted(produk, key=lambda x: x[key], reverse=reverse)
-    
-    # Membuat tabel untuk menampilkan produk yang sudah diurutkan
     tabel = PrettyTable()
     tabel.title = f"Produk Diurutkan Berdasarkan {key}"
     tabel.field_names = ["Nama", "Harga", "Stok"]
     
     for detail in sorted_items:
-        # Pastikan harga adalah integer untuk pemformatan
         harga = int(detail['Harga']) if isinstance(detail['Harga'], str) and detail['Harga'].isdigit() else detail['Harga']
         
         tabel.add_row([
@@ -312,31 +276,27 @@ def urutkan_produk(user):
             f"Rp {harga:,}",  
             detail["Stok"]
         ])
-        
-    print(tabel)  # Menampilkan tabel
+    print(tabel) 
     
 def transaksi(user):
     produk = dataProduk  
-    
     if not produk:
-        print("Belum ada produk tersedia!")
+        print("+====================================================================+")
+        print("|                Belum ada produk yang tersedia!                     |")
+        print("+====================================================================+")
         return
-        
     tampilkan_produk()  
     nama_produk = input("Masukkan nama produk yang ingin dibeli: ").lower()
-    
-    # Mencari produk berdasarkan nama
     produk_ditemukan = None
     for detail in produk:  
         if detail["Nama"].lower() == nama_produk:
             produk_ditemukan = detail
             break
-    
     if not produk_ditemukan:
-        print("Produk tidak ditemukan!")
+        print("+====================================================================+")
+        print("|                    Produk tidak ditemukan!                         |")
+        print("+====================================================================+")
         return
-    
-    # Menggunakan satu blok try-except untuk memeriksa dan mengonversi data yang dibutuhkan
     try:
         jumlah = int(input("Masukkan jumlah yang ingin dibeli: "))
         if jumlah <= 0:
@@ -355,26 +315,24 @@ def transaksi(user):
             input("Tekan enter untuk melanjutkan.....")    
         except KeyboardInterrupt:
             pass 
-
     if jumlah > stok_produk:
-        print("Stok tidak mencukupi!")
+        print("+====================================================================+")
+        print("|                      Stok tidak mencukupi!                          |")
+        print("+====================================================================+")
         return
-
     total_harga = harga_produk * jumlah  
-    
     if saldo_user < total_harga:
         print(f"Saldo tidak mencukupi! Total pembelian: Rp {total_harga:,}")
         return
-    
-    # Konfirmasi pembelian
     print(f"\nDetail Pembelian:")
     print(f"Produk: {produk_ditemukan['Nama']}")
     print(f"Jumlah: {jumlah}")
     print(f"Total: Rp {total_harga:,}")
-    
     konfirmasi = input("Lanjutkan pembelian? (y/n): ").lower()
     if konfirmasi != 'y':
-        print("Pembelian dibatalkan.")
+        print("+====================================================================+")
+        print("|                     Pembelian dibatalkan.                          |")
+        print("+====================================================================+")
         return
     
     # Proses pembelian
@@ -390,7 +348,6 @@ def transaksi(user):
             break
     simpan_pengguna(pengguna)  
     
-    # Menampilkan invoice
     print("\n=== INVOICE ===")
     print(f"Pembeli: {user['username']}")
     print(f"Produk: {produk_ditemukan['Nama']}")
@@ -398,7 +355,6 @@ def transaksi(user):
     print(f"Total: Rp {total_harga:,}")
     print(f"Sisa saldo: Rp {saldo_user - total_harga:,}")
 
-# Fungsi untuk melihat saldo
 def lihat_saldo(user):
     try:
         saldo_user = int(user['saldo'])  
@@ -409,11 +365,9 @@ def lihat_saldo(user):
             print("jangan tekan ctrl+C")
             input("Tekan enter untuk melanjutkan.....")
 
-# Fungsi untuk top up saldo
 def top_up_saldo(user):
     pilihan_nominal = [5000000, 7000000, 10000000, 15000000, 17000000, 20000000]
     
-    # Menampilkan tabel pilihan nominal top-up
     tabel = PrettyTable()
     tabel.title = "Pilihan Nominal Top-Up"
     tabel.field_names = ["Nomor", "Nominal"]
@@ -432,12 +386,10 @@ def top_up_saldo(user):
             
         jumlah = pilihan_nominal[pilihan - 1]
         
-        # Update saldo di database
         pengguna = muat_pengguna()
         for p in pengguna:
             if p["username"] == user["username"]:
                 try:
-                    # Pastikan saldo yang dibaca adalah integer
                     saldo_terbaru = int(p["saldo"]) + jumlah  
                     p["saldo"] = saldo_terbaru  
                     user["saldo"] = saldo_terbaru  
@@ -456,7 +408,6 @@ def top_up_saldo(user):
         except KeyboardInterrupt:
             pass 
         
-# Fungsi untuk registrasi
 def registrasi():
     pengguna = muat_pengguna()
     username = input("Masukkan username: ")
@@ -464,9 +415,7 @@ def registrasi():
     if any(user["username"] == username for user in pengguna):
         print("Username sudah digunakan!")
         return
-    
     password = pwinput.pwinput("Masukkan password: ")
-    
     pengguna.append({
         "username": username,
         "password": password,
@@ -491,7 +440,6 @@ def menu_user(user):
         print("+====================================================================+")
         try:                
             pilihan_pengguna = input("Pilihan opsi: ")
-                            
             if pilihan_pengguna == "1":
                 tampilkan_produk()
             elif pilihan_pengguna == "2":
@@ -521,7 +469,7 @@ def menu_user(user):
 
 def menu_admin():
     while True:
-        print("+====================================================================+")
+        print("\n+====================================================================+")
         print("|                             Menu Admin                             |")
         print("+====================================================================+")
         print("| [1]. Tampilkan Produk                                              |")
@@ -565,20 +513,16 @@ def login():
         username = input("Masukkan username: ")
         password = pwinput.pwinput("Masukkan password: ")
 
-    # Cek untuk login sebagai admin
         if username == "admin" and password == "admin123":
             print("Login sebagai Admin berhasil!")
             menu_admin()
             return
     
-    # Cek login untuk user biasa
         for user in pengguna:
             if user["username"] == username and user["password"] == password:
                 print("Login berhasil!")
                 menu_user(user)
                 return
-
-    # Jika loop selesai dan tidak ada kecocokan, beri opsi untuk mendaftar
         print("Mohon maaf, akun Anda tidak terdaftar.")
         pilih = input("Apakah Anda ingin mendaftar? (y/n): ").lower()
         if pilih == "y":
@@ -594,12 +538,12 @@ def login():
             except KeyboardInterrupt:
                 pass    
 
-
-
 def main():
     inisialisasi_file()
     while True:
         clear()
+        print("+====================================================================+")
+        print("|              Selamat Datang di Sistem Toko Perhiasan               |")
         print("+====================================================================+")
         print("|                            Menu Utama                              |")
         print("+====================================================================+")
